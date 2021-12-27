@@ -2,6 +2,7 @@ import {useNavigate, useParams} from 'react-router-dom';
 import styled from 'styled-components';
 import './comp-detail.css';
 import {useEffect, useState} from "react";
+import {connect} from "react-redux";
 
 const Box = styled.div`
   padding : 20px;
@@ -11,7 +12,7 @@ const Title = styled.h4`
   font-size : 25px;  
 `;
 
-export default function({product}){
+function Detail({product,dispatch, reducer}){
 
     const navigate = useNavigate();
     const {id} = useParams();
@@ -47,10 +48,22 @@ export default function({product}){
                     <h4 className="pt-5">{product[id].title}</h4>
                     <p>{product[id].content}</p>
                     <p>{product[id].price}</p>
-                    <button className="btn btn-danger">주문하기</button>
+                    <button className="btn btn-danger" onClick={()=>{
+                        dispatch({type : '항목추가', payload : {id : 2, name : '새로운상품', quan:1}});
+                        navigate('/cart');
+                    }}>주문하기</button>
                     <button className="btn btn-danger" onClick={()=>{navigate(-1)}}>뒤로가기</button>
                 </div>
             </div>
         </div>
     )
 }
+
+function 함수명2({reducer}){
+    console.log(reducer);
+    return {
+        reducer
+    }
+}
+
+export default connect(함수명2)(Detail);

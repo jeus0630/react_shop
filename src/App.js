@@ -6,6 +6,7 @@ import {useState} from "react";
 import CompDetail from "./Detail";
 import { Link, Route, Switch, Routes} from 'react-router-dom';
 import axios from 'axios';
+import Cart from "./Cart";
 
 function App() {
     let [product, productChange] = useState(Product);
@@ -35,6 +36,7 @@ function App() {
             <Route path="/" element={<CompMain product={product} productChange={productChange}></CompMain>}></Route>
             <Route path="/detail/:id" element={<CompDetail product={product}></CompDetail>}></Route>
             <Route path="/:id" element={<div>아무거나 보여주셈</div>}></Route>
+            <Route path="/cart" element={<Cart></Cart>}></Route>
         </Routes>
 
     </div>

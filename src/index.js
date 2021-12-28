@@ -26,19 +26,27 @@ let 기본state = [{id : 0, name : '멋진신발', quan : 2},{id : 1, name : '�
 function reducer(state = 기본state, 액션){
     if(액션.type === '항목추가'){
         let copy = [...state];
-        copy.push(액션.payload);
+        const bool = copy.some(el=>el.id == 액션.payload.id);
+        if(bool){
+            const idx = copy.findIndex(el=>
+                el.id == 액션.payload.id
+            )
+            copy[idx].quan++;
+        }else{
+            copy.push(액션.payload);
+        }
         return copy;
     }
 
     if(액션.type === '수량증가'){
         let copy = [...state];
-        copy[0].quan++;
+        copy[액션.payload.idx].quan++;
         return copy;
     }
 
     if(액션.type === '수량감소'){
         const copy = [...state];
-        copy[0].quan--;
+        copy[액션.payload.idx].quan--;
         return copy;
     }
 

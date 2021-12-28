@@ -1,7 +1,13 @@
 import {Table} from 'react-bootstrap';
-import {connect} from "react-redux";
+import {connect, useDispatch} from "react-redux";
+import {useSelector} from "react-redux";
+import {useEffect, memo} from "react";
 
-function Cart({reducer, dispatch, reducer2}){
+export default function Cart(){
+
+    let {reducer,reducer2} = useSelector(state => state);
+    let dispatch = useDispatch();
+
     return(
         <>
             <Table striped bordered hover>
@@ -21,8 +27,8 @@ function Cart({reducer, dispatch, reducer2}){
                         <td>{el.id}</td>
                         <td>{el.name}</td>
                         <td>{el.quan}</td>
-                        <td><button onClick={()=>{ dispatch({type : '수량증가', payload : {name : 'kim'}}) }}>+</button></td>
-                        <td><button onClick={()=>{ dispatch({type : '수량감소'}) }}>-</button></td>
+                        <td><button onClick={()=>{ dispatch({type : '수량증가', payload : {idx : idx}}) }}>+</button></td>
+                        <td><button onClick={()=>{ dispatch({type : '수량감소', payload : {idx : idx}}) }}>-</button></td>
                     </tr>)
                     })
                 }
@@ -36,16 +42,34 @@ function Cart({reducer, dispatch, reducer2}){
                  </div>
                 :null
             }
+            <Parent 이름="존박" 나이="20"></Parent>
         </>
     )
 }
 
-function 함수명({reducer, reducer2}){
-    console.log(reducer2);
-    return {
-        reducer,
-        reducer2
-    }
-}
+// function 함수명({reducer, reducer2}){
+//     console.log(reducer2);
+//     return {
+//         reducer,
+//         reducer2
+//     }
+// }
 
-export default connect(함수명)(Cart)
+// export default connect(함수명)(Cart)
+
+function Parent({이름, 나이}){
+    return (
+        <div>
+            <Child1 이름={이름}></Child1>
+            <Child2 나이={나이}></Child2>
+        </div>
+    )
+}
+function Child1(){
+    useEffect( ()=>{ console.log('렌더링됨1') } );
+    return <div>1111</div>
+}
+const Child2 = memo(()=>{
+    useEffect( ()=>{ console.log('렌더링됨2') } );
+    return <div>2222</div>
+});

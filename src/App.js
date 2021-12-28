@@ -2,11 +2,12 @@ import logo from './logo.svg';
 import './App.css';
 import {Navbar, Nav, NavDropdown, Container} from 'react-bootstrap';
 import Product from './data';
-import {useState} from "react";
-import CompDetail from "./Detail";
-import { Link, Route, Switch, Routes} from 'react-router-dom';
+import {useEffect, useState, lazy, Suspense} from "react";
+import {Link, Route, Switch, Routes, useNavigate} from 'react-router-dom';
 import axios from 'axios';
 import Cart from "./Cart";
+
+let Detail = lazy(() => import('./Detail.js'));
 
 function App() {
     let [product, productChange] = useState(Product);
@@ -34,7 +35,7 @@ function App() {
 
         <Routes>
             <Route path="/" element={<CompMain product={product} productChange={productChange}></CompMain>}></Route>
-            <Route path="/detail/:id" element={<CompDetail product={product}></CompDetail>}></Route>
+            <Route path="/detail/:id" element={<Suspense fallback={<div>loading....</div>}><Detail product={product}></Detail></Suspense>}></Route>
             <Route path="/:id" element={<div>아무거나 보여주셈</div>}></Route>
             <Route path="/cart" element={<Cart></Cart>}></Route>
         </Routes>
@@ -48,7 +49,7 @@ function CompMain({product, productChange}){
         <div className="container">
             <div className="row">
                 {
-                    product.map((el,idx)=> <CompProduct productData={product[idx]} key={idx}></CompProduct>)
+                    product.map((el,idx)=> <CompProduct productData={product[idx]} idx={idx} key={idx}></CompProduct>)
                 }
             </div>
             <button className="btn btn-primary" onClick={()=>{
@@ -58,18 +59,40 @@ function CompMain({product, productChange}){
                 })
                     .catch(()=>{});
             }}>더보기</button>
+            <TT></TT>
         </div>
     )
 }
 
-function CompProduct({productData}){
+function CompProduct({productData,idx}){
+    const navigate = useNavigate();
+
     return(
-        <div className="col-md-4">
+        <div className="col-md-4" onClick={()=>{navigate(`/detail/${idx}`)}}>
             <img src={productData.src} alt="" width="100%"/>
             <h4>{productData.title}</h4>
             <p>{productData.content} & {productData.price}</p>
         </div>
     )
+}
+
+function TT(){
+    let [count, setCount] = useState(0);
+    let [age, setAge] = useState(20);
+
+    useEffect(()=>{
+        const newAge = age + 1;
+        setAge(newAge);
+    },[count])
+
+    return (
+        <div>
+            <div>안녕하십니까 전 {age}</div>
+            <button onClick={()=>{
+                setCount(count+1)}}>누르면한살먹기</button>
+        </div>
+    )
+
 }
 
 export default App;

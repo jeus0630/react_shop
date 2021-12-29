@@ -21,6 +21,15 @@ function Detail({product,dispatch, reducer}){
     let [inputValue, inputValueChange] = useState('');
 
     useEffect(()=>{
+        const arr = JSON.parse(localStorage.getItem('recentItems')) || [];
+        const idx = arr.findIndex(el=>el===id);
+        if(idx == -1){
+            arr.unshift(id);
+        }else{
+            arr.splice(idx,1);
+            arr.unshift(id);
+        }
+        localStorage.setItem('recentItems',JSON.stringify(arr));
 
         return ()=>{
 
